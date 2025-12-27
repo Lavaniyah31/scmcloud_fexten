@@ -20,6 +20,95 @@
 
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="display-item_one" role="tabpanel" aria-labelledby="display-item_one--tab">
+                <?php 
+                // Check if this is Laptop Accessories category
+                $is_laptop_accessories = (stripos($cat_pro[0]->category_name, 'Laptop Accessories') !== false);
+                ?>
+                
+                <?php if ($is_laptop_accessories) { ?>
+                    <!-- Horizontal Scrollable Layout for Laptop Accessories -->
+                    <div class="position-relative">
+                        <div class="row flex-nowrap" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding-bottom: 10px;">
+                        <?php
+                        foreach ($cat_pro as $product) { 
+                            $prodlink =  base_url('/product/' . remove_space($product->product_name) . '/' . $product->product_id);
+                        ?>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2" style="flex: 0 0 auto; min-width: 200px; max-width: 220px;">
+                                <div class="feature-card card h-100 mb-3">
+                                    <div class="card-body p-3 text-center">
+                                        <a href="<?php echo $prodlink; ?>" class="d-block mb-2">
+                                            <?php if (@getimagesize($product->image_thumb) === false) { ?>
+                                                <img src="<?php echo base_url() . '/my-assets/image/no-image.jpg' ?>" class="img-fluid" alt="<?php echo html_escape($product->product_name) ?>" style="max-height: 150px; object-fit: contain;">
+                                            <?php } else { ?>
+                                                <img class="img-fluid" src="<?php echo base_url() . $product->image_thumb ?>" alt="<?php echo html_escape($product->product_name) ?>" style="max-height: 150px; object-fit: contain;">
+                                            <?php } ?>
+                                        </a>
+                                        <h4 class="product-name fs-14 font-weight-600 mt-2" style="height: 40px; overflow: hidden; line-height: 1.4;">
+                                            <a href="<?php echo $prodlink; ?>" class="text-dark"><?php echo html_escape($product->product_name) ?></a>
+                                        </h4>
+                                        <div class="star-rating justify-content-center my-2">
+                                            <?php
+                                                $result = $this->db->select('IFNULL(SUM(rate),0) as t_rates, count(rate) as t_reviewer')
+                                                    ->from('product_review')
+                                                    ->where('product_id', $product->product_id)
+                                                    ->where('status', 1)
+                                                    ->get()
+                                                    ->row();
+                                                $p_review = (!empty($result->t_reviewer)?$result->t_rates / $result->t_reviewer:0);
+                                                for($s=1; $s<=5; $s++){
+                                                    if($s <= floor($p_review)) {
+                                                        echo '<i class="fas fa-star"></i>';
+                                                    } else if($s == ceil($p_review)) {
+                                                        echo '<i class="fas fa-star-half-alt"></i>';
+                                                    }else{
+                                                        echo '<i class="far fa-star"></i>';
+                                                    }
+                                                }
+                                            ?>
+                                        </div>
+                                        <div class="price-area">
+                                            <?php
+                                            if ($product->onsale == 1 && !empty($product->onsale_price)) {
+                                                $price_val = $product->onsale_price * $target_con_rate;
+                                                $old_price = $product->price;
+                                            } else {
+                                                $price_val = $product->price * $target_con_rate;
+                                                $old_price = 0;
+                                            }
+                                            ?>
+                                            <div class="font-weight-bold text-dark fs-15">
+                                                <?php echo (($position1 == 0) ? $currency1 . number_format($price_val, 2, '.', ',') : number_format($price_val, 2, '.', ',') . $currency1); ?>
+                                            </div>
+                                            <?php if($old_price > 0){ ?>
+                                                <del class="text-muted fs-12">
+                                                    <?php echo (($position1 == 0) ? $currency1 . number_format($old_price, 2, '.', ',') : number_format($old_price, 2, '.', ',') . $currency1); ?>
+                                                </del>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        </div>
+                    </div>
+                    <style>
+                        .row.flex-nowrap::-webkit-scrollbar {
+                            height: 8px;
+                        }
+                        .row.flex-nowrap::-webkit-scrollbar-track {
+                            background: #f1f1f1;
+                            border-radius: 10px;
+                        }
+                        .row.flex-nowrap::-webkit-scrollbar-thumb {
+                            background: #888;
+                            border-radius: 10px;
+                        }
+                        .row.flex-nowrap::-webkit-scrollbar-thumb:hover {
+                            background: #555;
+                        }
+                    </style>
+                <?php } else { ?>
+                    <!-- Original Layout for Other Categories -->
                 <div class="row">
                     <?php
                     $counter=1;
@@ -155,6 +244,7 @@
                          $counter++; 
                      } ?>
                 </div>
+                <?php } ?>
             </div>
         </div>
     </div>

@@ -138,7 +138,7 @@ if (!empty($currency_new_id)) {
                                         } ?>" alt="" />
             </a>
             <!-- Search-->
-            <div class="main-search input-group-overlay d-none d-lg-block mx-4 ui-widget">
+            <div class="main-search input-group-overlay d-none d-lg-block flex-grow-1 mx-1 ui-widget" style="max-width: none;">
                 <?php echo form_open('category_product_search', array('method' => 'GET')) ?>
                 <div>
                     <div class="input-group-prepend-overlay">
@@ -157,7 +157,7 @@ if (!empty($currency_new_id)) {
 
 
             <!-- Toolbar-->
-            <div class="navbar-toolbar d-flex flex-shrink-0 align-items-center">
+            <div class="navbar-toolbar d-flex flex-shrink-0 align-items-center ml-1">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
                     <i data-feather="menu"></i>
                 </button>
@@ -235,61 +235,236 @@ if (!empty($currency_new_id)) {
                                             height="15" width="16">&nbsp; </span>
                                     <div> <?php echo html_escape($parent_category->category_name) ?></div>
                                 </a>
-                                <?php if ($sub_parent_cat) { ?>
-                                <div class="dropdown-menu p-0">
-
-                                    <div class="d-flex flex-wrap flex-md-nowrap position-relative px-lg-2">
+                                <?php if ($sub_parent_cat) { 
+                                    // Check if this is Accessories category for horizontal layout
+                                    $is_accessories = (stripos($parent_category->category_name, 'Accessories') !== false || stripos($parent_category->category_name, 'Accessaries') !== false);
+                                    // Check if this is Networking Devices or Computing Devices for vertical layout
+                                    $is_networking = (stripos($parent_category->category_name, 'Networking Devices') !== false);
+                                    $is_computing = (stripos($parent_category->category_name, 'Computing Devices') !== false);
+                                    
+                                    if ($is_accessories) { ?>
+                                    <!-- Horizontal Scrollable Layout for Accessories -->
+                                <div class="dropdown-menu p-2" style="min-width: 700px; max-width: 90vw;">
+                                    <div class="mega-menu-scroll" style="max-height: 380px; overflow-y: hidden; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 12px;">
+                                        <div class="d-flex flex-nowrap" style="gap: 15px;">
                                         <?php
-                                                    $ci = 0;
-                                                    foreach ($sub_parent_cat as $parent_cat) { ?>
-                                        <?php if ($ci % 2 == 0) { ?>
-                                        <div class="mega-dropdown-column py-4 px-lg-3">
-                                            <?php } ?>
-                                            <div class="widget widget-links">
-                                                <h6 class="mb-3"><a
-                                                        href="<?php echo base_url('category/p/' . remove_space($parent_cat->category_name) . '/' . $parent_cat->category_id) ?>"><?php echo html_escape($parent_cat->category_name) ?></a>
-                                                </h6>
-                                                <ul class="widget-list">
-                                                    <?php
-                                                                    if ($_SESSION["language"] != $language) {
-                                                                        $sub_cat = $this->db->select('a.*,IF(c.trans_name IS NULL OR c.trans_name = "",a.category_name,c.trans_name) as category_name')
-                                                                            ->from('product_category a')
-                                                                            ->where('a.parent_category_id', $parent_cat->category_id)
-                                                                            ->where('a.status', '1')
-                                                                            ->join('category_translation c', 'a.category_id = c.category_id', 'left')
-                                                                            ->order_by('a.menu_pos')
-                                                                            ->get()
-                                                                            ->result();
-                                                                    } else {
-                                                                        $sub_cat = $this->db->select('*')
-                                                                            ->from('product_category')
-                                                                            ->where('parent_category_id', $parent_cat->category_id)
-                                                                            ->where('status', '1')
-                                                                            ->order_by('menu_pos')
-                                                                            ->get()
-                                                                            ->result();
-                                                                    }
-                                                                    if ($sub_cat) {
-                                                                        foreach ($sub_cat as $s_p_cat) {
-                                                                    ?>
+                                                    $counter = 0;
+                                                    $total_cats = count($sub_parent_cat);
+                                                    $column_open = false;
+                                                    foreach ($sub_parent_cat as $parent_cat) { 
+                                                        // All columns have 4 items each
+                                                        if ($counter % 4 == 0) {
+                                                            echo '<div style="flex: 0 0 auto; min-width: 210px; max-width: 250px; background: #ffffff; padding: 12px;">';
+                                                            $column_open = true;
+                                                        }
+                                        ?>
+                                        <div class="widget widget-links mb-2" style="padding-bottom: 8px; border-bottom: 1px solid #ffffff;">
+                                            <h6 class="mb-1 font-weight-bold text-dark" style="font-size: 14px; line-height: 1.5; word-wrap: break-word; white-space: normal; font-weight: 700;"><a
+                                                    href="<?php echo base_url('category/p/' . remove_space($parent_cat->category_name) . '/' . $parent_cat->category_id) ?>" class="text-dark" style="text-decoration: none; display: block; font-weight: 700;"><?php echo html_escape($parent_cat->category_name) ?></a>
+                                            </h6>
+                                            <ul class="widget-list" style="font-size: 12px; list-style: none; padding-left: 0; margin-bottom: 0;">
+                                                <?php
+                                                                if ($_SESSION["language"] != $language) {
+                                                                    $sub_cat = $this->db->select('a.*,IF(c.trans_name IS NULL OR c.trans_name = "",a.category_name,c.trans_name) as category_name')
+                                                                        ->from('product_category a')
+                                                                        ->where('a.parent_category_id', $parent_cat->category_id)
+                                                                        ->where('a.status', '1')
+                                                                        ->join('category_translation c', 'a.category_id = c.category_id', 'left')
+                                                                        ->order_by('a.menu_pos')
+                                                                        ->limit(6)
+                                                                        ->get()
+                                                                        ->result();
+                                                                } else {
+                                                                    $sub_cat = $this->db->select('*')
+                                                                        ->from('product_category')
+                                                                        ->where('parent_category_id', $parent_cat->category_id)
+                                                                        ->where('status', '1')
+                                                                        ->order_by('menu_pos')
+                                                                        ->limit(6)
+                                                                        ->get()
+                                                                        ->result();
+                                                                }
+                                                                if ($sub_cat) {
+                                                                    foreach ($sub_cat as $s_p_cat) {
+                                                                ?>
 
-                                                    <li class="widget-list-item pb-1"><a class="widget-list-link"
+                                                <li style="padding: 3px 0;"><a class="widget-list-link text-dark" style="text-decoration: none; transition: all 0.2s;"
+                                                        onmouseover="this.style.color='#007bff'; this.style.paddingLeft='4px';"
+                                                        onmouseout="this.style.color='#000'; this.style.paddingLeft='0';"
+                                                        href="<?php echo base_url('category/p/' . remove_space($s_p_cat->category_name) . '/' . $s_p_cat->category_id) ?>"><?php echo html_escape($s_p_cat->category_name) ?></a>
+                                                </li>
+                                                <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                </ul>
+                                        </div>
+                                        <?php 
+                                                        $counter++;
+                                                        // Close column after every 4 items
+                                                        if ($counter % 4 == 0 || $counter == $total_cats) {
+                                                            if ($column_open) {
+                                                                echo '</div>';
+                                                                $column_open = false;
+                                                            }
+                                                        }
+                                                    } ?>
+                                        </div>
+                                    </div>
+                                    <style>
+                                        .mega-menu-scroll::-webkit-scrollbar {
+                                            height: 8px;
+                                        }
+                                        .mega-menu-scroll::-webkit-scrollbar-track {
+                                            background: #f1f1f1;
+                                        }
+                                        .mega-menu-scroll::-webkit-scrollbar-thumb {
+                                            background: #888;
+                                            border-radius: 4px;
+                                        }
+                                        .mega-menu-scroll::-webkit-scrollbar-thumb:hover {
+                                            background: #555;
+                                        }
+                                    </style>
+                                    </div>                                <?php } elseif ($is_networking) { ?>
+                                    <!-- Vertical Layout for Networking Devices - 2 per column -->
+                                    <div class="dropdown-menu p-2">
+                                        <div class="d-flex flex-wrap" style="gap: 0;">
+                                            <?php
+                                            $counter = 0;
+                                            $total_cats = count($sub_parent_cat);
+                                            foreach ($sub_parent_cat as $parent_cat) {
+                                                if ($counter % 2 == 0) {
+                                                    echo '<div style="flex: 0 0 auto; min-width: 210px; max-width: 250px; padding: 12px;">';
+                                                }
+                                            ?>
+                                            <div class="widget widget-links mb-2" style="padding-bottom: 8px; border-bottom: 1px solid #ffffff;">
+                                                <h6 class="font-weight-bold mb-1 text-dark" style="font-size: 14px; line-height: 1.4; word-wrap: break-word; white-space: normal; font-weight: 700;"><a
+                                                        href="<?php echo base_url('category/p/' . remove_space($parent_cat->category_name) . '/' . $parent_cat->category_id) ?>" class="text-dark" style="text-decoration: none; display: block; font-weight: 700;"><?php echo html_escape($parent_cat->category_name) ?></a>
+                                                </h6>
+                                                <ul class="widget-list" style="font-size: 12px; list-style: none; padding-left: 0; margin-bottom: 0;">
+                                                    <?php
+                                                    if ($_SESSION["language"] != $language) {
+                                                        $sub_cat = $this->db->select('a.*,IF(c.trans_name IS NULL OR c.trans_name = "",a.category_name,c.trans_name) as category_name')
+                                                            ->from('product_category a')
+                                                            ->where('a.parent_category_id', $parent_cat->category_id)
+                                                            ->where('a.status', '1')
+                                                            ->join('category_translation c', 'a.category_id = c.category_id', 'left')
+                                                            ->order_by('a.menu_pos')
+                                                            ->limit(6)
+                                                            ->get()
+                                                            ->result();
+                                                    } else {
+                                                        $sub_cat = $this->db->select('*')
+                                                            ->from('product_category')
+                                                            ->where('parent_category_id', $parent_cat->category_id)
+                                                            ->where('status', '1')
+                                                            ->order_by('menu_pos')
+                                                            ->limit(6)
+                                                            ->get()
+                                                            ->result();
+                                                    }
+                                                    if ($sub_cat) {
+                                                        foreach ($sub_cat as $s_p_cat) {
+                                                    ?>
+
+                                                    <li style="padding: 2px 0;"><a class="widget-list-link text-dark" style="text-decoration: none; transition: all 0.2s;"
+                                                            onmouseover="this.style.color='#007bff'; this.style.paddingLeft='4px';"
+                                                            onmouseout="this.style.color='#000'; this.style.paddingLeft='0';"
                                                             href="<?php echo base_url('category/p/' . remove_space($s_p_cat->category_name) . '/' . $s_p_cat->category_id) ?>"><?php echo html_escape($s_p_cat->category_name) ?></a>
                                                     </li>
                                                     <?php
-                                                                        }
-                                                                    }
-                                                                    ?>
+                                                        }
+                                                    }
+                                                    ?>
                                                 </ul>
                                             </div>
-                                            <?php if ($ci % 2 == 1) { ?>
+                                            <?php
+                                                $counter++;
+                                                if ($counter % 2 == 0 || $counter == count($sub_parent_cat)) {
+                                                    echo '</div>';
+                                                }
+                                            } ?>
                                         </div>
-                                        <?php } ?>
-                                        <?php $ci++;
-                                                    } ?>
+                                    </div>                                <?php } else { ?>
+                                    <!-- Horizontal Layout for Other Categories - 2 per column -->
+                                    <div class="dropdown-menu p-2" style="min-width: 600px; max-width: 90vw;">
+                                        <div class="mega-menu-scroll" style="max-height: 380px; overflow-y: hidden; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                                            <div class="d-flex flex-nowrap" style="gap: 0;">
+                                            <?php
+                                            $counter = 0;
+                                            $total_cats = count($sub_parent_cat);
+                                            $column_open = false;
+                                            foreach ($sub_parent_cat as $parent_cat) {
+                                                if ($counter % 2 == 0) {
+                                                    echo '<div style="flex: 0 0 auto; min-width: 210px; max-width: 250px; padding: 12px;">';
+                                                    $column_open = true;
+                                                }
+                                            ?>
+                                            <div class="widget widget-links mb-2" style="padding-bottom: 8px; border-bottom: 1px solid #ffffff;">
+                                                <h6 class="font-weight-bold mb-1 text-dark" style="font-size: 14px; line-height: 1.4; word-wrap: break-word; white-space: normal; font-weight: 700;"><a
+                                                        href="<?php echo base_url('category/p/' . remove_space($parent_cat->category_name) . '/' . $parent_cat->category_id) ?>" class="text-dark" style="text-decoration: none; display: block; font-weight: 700;"><?php echo html_escape($parent_cat->category_name) ?></a>
+                                                </h6>
+                                                <ul class="widget-list" style="font-size: 12px; list-style: none; padding-left: 0; margin-bottom: 0;">
+                                                    <?php
+                                                    if ($_SESSION["language"] != $language) {
+                                                        $sub_cat = $this->db->select('a.*,IF(c.trans_name IS NULL OR c.trans_name = "",a.category_name,c.trans_name) as category_name')
+                                                            ->from('product_category a')
+                                                            ->where('a.parent_category_id', $parent_cat->category_id)
+                                                            ->where('a.status', '1')
+                                                            ->join('category_translation c', 'a.category_id = c.category_id', 'left')
+                                                            ->order_by('a.menu_pos')
+                                                            ->limit(6)
+                                                            ->get()
+                                                            ->result();
+                                                    } else {
+                                                        $sub_cat = $this->db->select('*')
+                                                            ->from('product_category')
+                                                            ->where('parent_category_id', $parent_cat->category_id)
+                                                            ->where('status', '1')
+                                                            ->order_by('menu_pos')
+                                                            ->limit(6)
+                                                            ->get()
+                                                            ->result();
+                                                    }
+                                                    if ($sub_cat) {
+                                                        foreach ($sub_cat as $s_p_cat) {
+                                                    ?>
+
+                                                    <li style="padding: 2px 0;"><a class="widget-list-link text-dark" style="text-decoration: none; transition: all 0.2s;"
+                                                            onmouseover="this.style.color='#007bff'; this.style.paddingLeft='4px';"
+                                                            onmouseout="this.style.color='#000'; this.style.paddingLeft='0';"
+                                                            href="<?php echo base_url('category/p/' . remove_space($s_p_cat->category_name) . '/' . $s_p_cat->category_id) ?>"><?php echo html_escape($s_p_cat->category_name) ?></a>
+                                                    </li>
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </ul>
+                                            </div>
+                                            <?php
+                                                $counter++;
+                                                if ($counter % 2 == 0 || $counter == count($sub_parent_cat)) {
+                                                    if ($column_open) {
+                                                        echo '</div>';
+                                                        $column_open = false;
+                                                    }
+                                                }
+                                            } ?>
+                                            </div>
+                                        </div>
+                                        <style>
+                                            .mega-menu-scroll::-webkit-scrollbar {
+                                                height: 0px;
+                                                display: none;
+                                            }
+                                            .mega-menu-scroll {
+                                                scrollbar-width: none;
+                                            }
+                                        </style>
                                     </div>
-                                </div>
-                                <?php } ?>
+                                <?php } 
+                                } ?>
                             </li>
                             <?php
                                     $i++;
