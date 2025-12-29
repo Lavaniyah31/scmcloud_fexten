@@ -119,7 +119,7 @@
                     <h3 class="link-title fs-17 mb-3 font-weight-600 position-relative">Find Us</h3>
                     <div class="map-container" style="position: relative; width: 100%; height: 250px; border-radius: 8px; overflow: hidden;">
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.798098948536!2d79.85049931477557!3d6.914758995006846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae259692f40f7e9%3A0x8d5e3b8c8b8b8b8b!2sUnity%20Plaza%2C%20Colombo!5e0!3m2!1sen!2slk!4v1234567890123!5m2!1sen!2slk"
+                            src="https://maps.google.com/maps?q=Unity+Plaza+Building,+Colombo+04&t=&z=15&ie=UTF8&iwloc=&output=embed"
                             width="100%" 
                             height="250" 
                             style="border:0;" 

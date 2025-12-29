@@ -274,7 +274,7 @@ $theme = $CI->Themes->get_theme();
                         class="summary-header d-flex flex-wrap align-items-center list-unstyled  border-bottom font-weight-600 pb-2">
                         <li class="position-relative px-2 px-md-3">
                             <?php if (!($is_affiliate == 1)) { ?>
-                            <div class="stock">
+                            <div class="stock" style="display:none;">
                                 <label
                                     class="text-dark pr-1 font-weight-500 mb-0"><?php echo display('status') ?>:</label>
                                 <input type="hidden" value="<?php echo html_escape($stok) ?>" id="stok">

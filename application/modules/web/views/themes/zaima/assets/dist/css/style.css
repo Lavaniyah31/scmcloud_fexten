@@ -4802,44 +4802,7 @@ a.read-link:before {
     transform-origin: 50% 100%;
 }
 .product:hover .product__image {
-    -webkit-animation: swing 0.6s forwards;
-    animation: swing 0.6s forwards;
-}
-@-webkit-keyframes swing {
-    25% {
-        -webkit-transform: rotate3d(0, 0, 1, 6deg);
-        transform: rotate3d(0, 0, 1, 6deg);
-    }
-    50% {
-        -webkit-transform: rotate3d(0, 0, 1, -4deg);
-        transform: rotate3d(0, 0, 1, -4deg);
-    }
-    75% {
-        -webkit-transform: rotate3d(0, 0, 1, 2deg);
-        transform: rotate3d(0, 0, 1, 2deg);
-    }
-    100% {
-        -webkit-transform: rotate3d(0, 0, 1, 0deg);
-        transform: rotate3d(0, 0, 1, 0deg);
-    }
-}
-@keyframes swing {
-    25% {
-        -webkit-transform: rotate3d(0, 0, 1, 6deg);
-        transform: rotate3d(0, 0, 1, 6deg);
-    }
-    50% {
-        -webkit-transform: rotate3d(0, 0, 1, -4deg);
-        transform: rotate3d(0, 0, 1, -4deg);
-    }
-    75% {
-        -webkit-transform: rotate3d(0, 0, 1, 2deg);
-        transform: rotate3d(0, 0, 1, 2deg);
-    }
-    100% {
-        -webkit-transform: rotate3d(0, 0, 1, 0deg);
-        transform: rotate3d(0, 0, 1, 0deg);
-    }
+    /* Animation removed for stability */
 }
 .product__title {
     overflow: hidden;
@@ -4901,18 +4864,7 @@ a.read-link:before {
 .deals-item-inner {
     border-radius: 8px;
 }
-.feature-card.shadow-sm:hover,
-.deals-item-inner.shadow-sm:hover{
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-}
-.feature-card:hover,
-.deals-item-inner:hover{
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;;
-}
-.feature-card.shadow-sm:hover,
-.deals-item-inner.shadow-sm:hover{
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-}
+/* Hover box-shadow effects removed for stability */
 .deals-item-inner a {
     color: inherit;
 }
@@ -4924,11 +4876,11 @@ a.read-link:before {
 }
 .product-img img,
 .deals-item-inner .item-image img{
-    transition: transform .3s, filter 1.5s ease-in-out;
+    transition: filter 1.5s ease-in-out;
 }
 .feature-card:hover .product-img img,
 .deals-item-inner:hover .item-image img {
-    transform: scale(1.1);
+    /* Scale transform removed for stability */
 }
 .deals-item-inner .item-details {
     margin: 0 12px 12px;

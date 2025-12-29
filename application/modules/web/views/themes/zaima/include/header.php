@@ -288,9 +288,9 @@ if (!empty($currency_new_id)) {
                                                                     foreach ($sub_cat as $s_p_cat) {
                                                                 ?>
 
-                                                <li style="padding: 3px 0;"><a class="widget-list-link text-dark" style="text-decoration: none; transition: all 0.2s;"
-                                                        onmouseover="this.style.color='#007bff'; this.style.paddingLeft='4px';"
-                                                        onmouseout="this.style.color='#000'; this.style.paddingLeft='0';"
+                                                <li style="padding: 3px 0;"><a class="widget-list-link text-dark" style="text-decoration: none;"
+                                                        onmouseover="this.style.color='#007bff';"
+                                                        onmouseout="this.style.color='#000';"
                                                         href="<?php echo base_url('category/p/' . remove_space($s_p_cat->category_name) . '/' . $s_p_cat->category_id) ?>"><?php echo html_escape($s_p_cat->category_name) ?></a>
                                                 </li>
                                                 <?php
@@ -368,9 +368,9 @@ if (!empty($currency_new_id)) {
                                                         foreach ($sub_cat as $s_p_cat) {
                                                     ?>
 
-                                                    <li style="padding: 2px 0;"><a class="widget-list-link text-dark" style="text-decoration: none; transition: all 0.2s;"
-                                                            onmouseover="this.style.color='#007bff'; this.style.paddingLeft='4px';"
-                                                            onmouseout="this.style.color='#000'; this.style.paddingLeft='0';"
+                                                    <li style="padding: 2px 0;"><a class="widget-list-link text-dark" style="text-decoration: none;"
+                                                            onmouseover="this.style.color='#007bff';"
+                                                            onmouseout="this.style.color='#000';"
                                                             href="<?php echo base_url('category/p/' . remove_space($s_p_cat->category_name) . '/' . $s_p_cat->category_id) ?>"><?php echo html_escape($s_p_cat->category_name) ?></a>
                                                     </li>
                                                     <?php
@@ -431,9 +431,9 @@ if (!empty($currency_new_id)) {
                                                         foreach ($sub_cat as $s_p_cat) {
                                                     ?>
 
-                                                    <li style="padding: 2px 0;"><a class="widget-list-link text-dark" style="text-decoration: none; transition: all 0.2s;"
-                                                            onmouseover="this.style.color='#007bff'; this.style.paddingLeft='4px';"
-                                                            onmouseout="this.style.color='#000'; this.style.paddingLeft='0';"
+                                                    <li style="padding: 2px 0;"><a class="widget-list-link text-dark" style="text-decoration: none;"
+                                                            onmouseover="this.style.color='#007bff';"
+                                                            onmouseout="this.style.color='#000';"
                                                             href="<?php echo base_url('category/p/' . remove_space($s_p_cat->category_name) . '/' . $s_p_cat->category_id) ?>"><?php echo html_escape($s_p_cat->category_name) ?></a>
                                                     </li>
                                                     <?php

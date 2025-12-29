@@ -26,14 +26,14 @@
                 ?>
                 
                 <?php if ($is_laptop_accessories) { ?>
-                    <!-- Horizontal Scrollable Layout for Laptop Accessories -->
+                    <!-- Horizontal Scrollable Layout for Laptop Accessories (Max 6 visible) -->
                     <div class="position-relative">
-                        <div class="row flex-nowrap" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding-bottom: 10px;">
+                        <div class="laptop-accessories-scroll" style="display: flex; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding-bottom: 10px; gap: 15px;">
                         <?php
                         foreach ($cat_pro as $product) { 
                             $prodlink =  base_url('/product/' . remove_space($product->product_name) . '/' . $product->product_id);
                         ?>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2" style="flex: 0 0 auto; min-width: 200px; max-width: 220px;">
+                            <div class="laptop-accessory-item" style="flex: 0 0 auto; min-width: calc((100% - 75px) / 6); max-width: calc((100% - 75px) / 6);">
                                 <div class="feature-card card h-100 mb-3">
                                     <div class="card-body p-3 text-center">
                                         <a href="<?php echo $prodlink; ?>" class="d-block mb-2">
@@ -92,19 +92,50 @@
                         </div>
                     </div>
                     <style>
-                        .row.flex-nowrap::-webkit-scrollbar {
+                        /* Laptop Accessories Scrollable Container */
+                        .laptop-accessories-scroll {
+                            scrollbar-width: thin;
+                            scrollbar-color: #888 #f1f1f1;
+                        }
+                        .laptop-accessories-scroll::-webkit-scrollbar {
                             height: 8px;
                         }
-                        .row.flex-nowrap::-webkit-scrollbar-track {
+                        .laptop-accessories-scroll::-webkit-scrollbar-track {
                             background: #f1f1f1;
                             border-radius: 10px;
                         }
-                        .row.flex-nowrap::-webkit-scrollbar-thumb {
+                        .laptop-accessories-scroll::-webkit-scrollbar-thumb {
                             background: #888;
                             border-radius: 10px;
                         }
-                        .row.flex-nowrap::-webkit-scrollbar-thumb:hover {
+                        .laptop-accessories-scroll::-webkit-scrollbar-thumb:hover {
                             background: #555;
+                        }
+                        
+                        /* Responsive adjustments for different screen sizes */
+                        @media (max-width: 1200px) {
+                            .laptop-accessory-item {
+                                min-width: calc((100% - 60px) / 5) !important;
+                                max-width: calc((100% - 60px) / 5) !important;
+                            }
+                        }
+                        @media (max-width: 992px) {
+                            .laptop-accessory-item {
+                                min-width: calc((100% - 45px) / 4) !important;
+                                max-width: calc((100% - 45px) / 4) !important;
+                            }
+                        }
+                        @media (max-width: 768px) {
+                            .laptop-accessory-item {
+                                min-width: calc((100% - 30px) / 3) !important;
+                                max-width: calc((100% - 30px) / 3) !important;
+                            }
+                        }
+                        @media (max-width: 576px) {
+                            .laptop-accessory-item {
+                                min-width: calc((100% - 15px) / 2) !important;
+                                max-width: calc((100% - 15px) / 2) !important;
+                            }
                         }
                     </style>
                 <?php } else { ?>

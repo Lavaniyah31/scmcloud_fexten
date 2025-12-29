@@ -323,7 +323,7 @@ class Homes extends CI_Model
     {
         // Check if site_analytics table exists and has data
         if ($this->db->table_exists('site_analytics')) {
-            // Get top 5 products from site_analytics based on clicks
+            // Get top 10 products from site_analytics based on clicks
             $result = $this->db->select('pi.*, pc.*, b.brand_name, sa.clicks')
                 ->from('site_analytics as sa')
                 ->join('product_information as pi', 'pi.product_id = sa.product_id')
@@ -331,7 +331,7 @@ class Homes extends CI_Model
                 ->join('brand as b', 'b.brand_id = pi.brand_id', 'left')
                 ->where('pi.status', 1)
                 ->order_by('sa.clicks', 'DESC')
-                ->limit(5)
+                ->limit(10)
                 ->get()
                 ->result();
             
@@ -351,7 +351,7 @@ class Homes extends CI_Model
                 ->join('brand as b', 'b.brand_id = pi.brand_id', 'left')
                 ->where_in('pi.product_id', $product_ids)
                 ->where('pi.status', 1)
-                ->limit(5)
+                ->limit(10)
                 ->get()
                 ->result();
             

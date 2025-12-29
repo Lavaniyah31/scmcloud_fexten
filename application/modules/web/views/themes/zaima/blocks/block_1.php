@@ -17,6 +17,117 @@
             </div>
         </div>
         <div class="headding-border position-relative mb-4 d-none d-sm-block"></div>
+        
+        <?php 
+        // Check if this is Laptop Accessories category
+        $is_laptop_accessories = (stripos($cat_pro[0]->category_name, 'Laptop Accessories') !== false || stripos($cat_pro[0]->category_name, 'Laptop Accessaries') !== false);
+        ?>
+        
+        <?php if ($is_laptop_accessories) { ?>
+            <!-- Horizontal Scrollable Layout for Laptop Accessories (Max 6 visible) -->
+            <div class="position-relative">
+                <div class="laptop-accessories-scroll" style="display: flex; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding-bottom: 10px; gap: 15px;">
+                <?php
+                foreach ($cat_pro as $product) { 
+                    $prodlink =  base_url('/product/' . remove_space($product->product_name) . '/' . $product->product_id);
+                ?>
+                    <div class="laptop-accessory-item" style="flex: 0 0 auto; min-width: calc((100% - 75px) / 6); max-width: calc((100% - 75px) / 6);">
+                        <div class="feature-card card border-0 border h-100">
+                            <div class="card-body">
+                                <a href="<?php echo $prodlink; ?>" class="product-img d-block">
+                                    <?php if (@getimagesize($product->image_thumb) === false) { ?>
+                                        <img src="<?php echo base_url() . '/my-assets/image/no-image.jpg' ?>" class="media-object img-fluid" alt="image">
+                                    <?php } else { ?>
+                                        <img class="img-fluid" src="<?php echo base_url() . $product->image_thumb ?>" alt="image">
+                                    <?php } ?>
+                                </a>
+                                <h3 class="product-name fs-15 font-weight-600 overflow-hidden mt-2">
+                                    <a href="<?php echo $prodlink; ?>" class="text-black"><?php echo html_escape($product->product_name) ?></a>
+                                </h3>
+                                <div class="star-rating">
+                                    <?php
+                                    $result = $this->db->select('IFNULL(SUM(rate),0) as t_rates, count(rate) as t_reviewer')
+                                        ->from('product_review')
+                                        ->where('product_id', $product->product_id)
+                                        ->where('status', 1)
+                                        ->get()
+                                        ->row();
+                                    $p_review = (!empty($result->t_reviewer)?$result->t_rates / $result->t_reviewer:0);
+                                    for($s=1; $s<=5; $s++){
+                                        if($s <= floor($p_review)) {
+                                            echo '<i class="fas fa-star"></i>';
+                                        } else if($s == ceil($p_review)) {
+                                            echo '<i class="fas fa-star-half-alt"></i>';
+                                        }else{
+                                            echo '<i class="far fa-star"></i>';
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                                <div class="product-price font-weight-bolder font-italic">
+                                    <?php
+                                    if ($product->onsale == 1 && !empty($product->onsale_price)) {
+                                        $price_val = $product->onsale_price * $target_con_rate;
+                                    }else{
+                                        $price_val = $product->price * $target_con_rate;
+                                    }
+                                    echo  (($position1 == 0) ? $currency1 . number_format($price_val, 2, '.', ',') : number_format($price_val, 2, '.', ',') . $currency1); ?> / <?php echo display('unit') ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+                </div>
+            </div>
+            <style>
+                /* Laptop Accessories Scrollable Container */
+                .laptop-accessories-scroll {
+                    scrollbar-width: thin;
+                    scrollbar-color: #888 #f1f1f1;
+                }
+                .laptop-accessories-scroll::-webkit-scrollbar {
+                    height: 8px;
+                }
+                .laptop-accessories-scroll::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 10px;
+                }
+                .laptop-accessories-scroll::-webkit-scrollbar-thumb {
+                    background: #888;
+                    border-radius: 10px;
+                }
+                .laptop-accessories-scroll::-webkit-scrollbar-thumb:hover {
+                    background: #555;
+                }
+                
+                /* Responsive adjustments for different screen sizes */
+                @media (max-width: 1200px) {
+                    .laptop-accessory-item {
+                        min-width: calc((100% - 60px) / 5) !important;
+                        max-width: calc((100% - 60px) / 5) !important;
+                    }
+                }
+                @media (max-width: 992px) {
+                    .laptop-accessory-item {
+                        min-width: calc((100% - 45px) / 4) !important;
+                        max-width: calc((100% - 45px) / 4) !important;
+                    }
+                }
+                @media (max-width: 768px) {
+                    .laptop-accessory-item {
+                        min-width: calc((100% - 30px) / 3) !important;
+                        max-width: calc((100% - 30px) / 3) !important;
+                    }
+                }
+                @media (max-width: 576px) {
+                    .laptop-accessory-item {
+                        min-width: calc((100% - 15px) / 2) !important;
+                        max-width: calc((100% - 15px) / 2) !important;
+                    }
+                }
+            </style>
+        <?php } else { ?>
+            <!-- Original Layout for Other Categories -->
         <div class="row">
             <?php
             $bpro=1;
@@ -85,5 +196,6 @@
             <?php break; }  ?>
             <?php $bpro++; } ?>
         </div>
+        <?php } ?>
     </div>
 </div>
